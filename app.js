@@ -4,8 +4,9 @@ var io = require('socket.io')({
 
 io.attach(4567);
 
+/*
 io.on('connection', function(socket){
-    console.log("Connection");
+    console.log("Someone connected...");
 
     socket.on('beep', function(data){
         console.log("beep was called. data: "+data['email']+", "+data['pass']);
@@ -23,3 +24,8 @@ io.on('connection', function(socket){
 //        socket.emit('boop');
     });
 })
+*/
+
+var Server = require("./lib/Server.js");
+
+new Server.Server(io).init();

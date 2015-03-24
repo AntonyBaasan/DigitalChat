@@ -8,8 +8,9 @@ io.on('connection', function(socket){
     console.log("Connection");
 
     socket.on('beep', function(data){
-        console.log("beep was called");
+        console.log("beep was called. data: "+data['email']+", "+data['pass']);
   //      socket.emit('boop');
+
     });
 
     socket.on('test', function(){

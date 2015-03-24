@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/antonybaasan/digitalchat/issues"
   },
-  "homepage": "https://github.com/antonybaasan/digitalchat"
+  "homepage": "https://github.com/antonybaasan/digitalchat",
+  "dependencies": {
+    "socket.io": "^1.3.5"
+  }
 }

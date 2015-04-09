@@ -30,6 +30,78 @@ describe("Digital Chat Socket Test :: ", function () {
             });
         });
 
+        it("should logout from server", function (done) {
+            var client1 = io.connect(socketURL, options);
+            //Connect First client
+            client1.on('connect', function (data) {
+                client1.emit("login", { "fromUser": "Antony" });
+            });
+
+            var client2 = io.connect(socketURL, options);
+            //Connect First client
+            client2.on('connect', function (data) {
+                client2.emit("login", { "fromUser": "User2" });
+            });
+
+            client1.on("welcome", function (data) {
+                setTimeout(function () {
+                    client1.emit("logout", { "fromUser": "Antony" });
+                }, 500);
+            });
+
+            client2.on("userLogout", function (data) {
+                assert.equal(data["fromUser"], "Antony");
+
+                client1.disconnect();
+                client2.disconnect();
+                done();
+            });
+        });
+
+        it("should logout repeadetly from server", function (done) {
+            messagesCount = 0;
+            var client1 = io.connect(socketURL, options);
+            //Connect First client
+            client1.on('connect', function (data) {
+                client1.emit("login", { "fromUser": "Antony" });
+            });
+
+            var client2 = io.connect(socketURL, options);
+            //Connect First client
+            client2.on('connect', function (data) {
+                client2.emit("login", { "fromUser": "User2" });
+            });
+
+            var client3 = io.connect(socketURL, options);
+            //Connect First client
+            client3.on('connect', function (data) {
+                client3.emit("login", { "fromUser": "User3" });
+            });
+
+            client1.on("welcome", function (data) {
+                setTimeout(function () {
+                    client1.emit("logout", { "fromUser": data["fromUser"] });
+                }, 200);
+            });
+
+            client2.on("userLogout", function (data) {
+                assert.equal(data["fromUser"], "Antony");
+
+                setTimeout(function () {
+                    client1.emit("login", { "fromUser": "Antony" });
+                }, 500);
+
+                messagesCount++;
+                if (messagesCount == 3) {
+                    client1.disconnect();
+                    client2.disconnect();
+                    client3.disconnect();
+                    done();
+                }
+            });
+        });
+
+
         it("should raise error if user with wrong name", function (done) {
             messagesCount = 0;
             var client1 = io.connect(socketURL, options);

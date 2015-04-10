@@ -49,7 +49,7 @@ describe("Digital Chat Socket Test :: ", function () {
                 }, 500);
             });
 
-            client2.on("userLogout", function (data) {
+            client2.on("userDisconnected", function (data) {
                 assert.equal(data["fromUser"], "Antony");
 
                 client1.disconnect();
@@ -84,12 +84,9 @@ describe("Digital Chat Socket Test :: ", function () {
                 }, 200);
             });
 
-            client2.on("userLogout", function (data) {
+            client2.on("userDisconnected", function (data) {
                 assert.equal(data["fromUser"], "Antony");
 
-                setTimeout(function () {
-                    client1.emit("login", { "fromUser": "Antony" });
-                }, 500);
 
                 messagesCount++;
                 if (messagesCount == 3) {
@@ -97,6 +94,12 @@ describe("Digital Chat Socket Test :: ", function () {
                     client2.disconnect();
                     client3.disconnect();
                     done();
+                }
+                else {
+                    setTimeout(function () {
+                        client1.emit("login", { "fromUser": "Antony" });
+                    }, 500);
+                
                 }
             });
         });
